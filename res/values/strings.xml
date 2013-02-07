@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Smiley Replacer</string>
+    <string name="title_activity_import">Import smiley pack</string>
+    <string name="preview_explanation">The following smiley pack will be used for the SMS/MMS app:</string>
+    <string name="chooser_explanation">Choose a smiley pack from list below which should be used for the SMS/MMS app. Long-press to delete the smiley pack.</string>
+    <string name="title_activity_chooser">Choose a smiley pack</string>
+    <string name="xposed_not_active">Xposed is not active! Please make sure the framework is installed, this module is activated and you have rebooted your phone after these steps.</string>
+    <string name="restart_sms_mms">Restart SMS/MMS</string>
+    <string name="start_import">Start import</string>
+    <string name="no_smiley_pack">No smiley pack selected</string>
+    <string name="title_chooser_select_smiley_pack">Select smiley pack</string>
+    <string name="could_not_launch_mms">Could not launch MMS/SMS app (package %s)!</string>
+    <string name="alert_title_file_exists">File exists already</string>
+    <string name="alert_message_file_exists">Overwrite the existing smiley pack?</string>
+    <string name="alert_title_import_failed">Import failed</string>
+    <string name="alert_title_import_success">Import successful</string>
+    <string name="alert_message_import_success">Delete original file now?</string>
+    <string name="alert_title_delete">Delete smiley pack?</string>
+    <string name="alert_message_delete">Do you really want to delete \"%s\"?</string>
+    <string name="preview_error_occured">An error occurred:</string>
+    <string name="menu_reset">Reset (use default smileys)</string>
+    <string name="menu_import">Import smiley pack</string>
+    <string name="menu_reload">Reload smiley packs</string>
+
+</resources>
