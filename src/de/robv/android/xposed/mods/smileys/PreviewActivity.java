@@ -21,11 +21,18 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import de.robv.android.xposed.mods.smileys.R.id;
 import de.robv.android.xposed.mods.smileys.views.MovieSpan;
 
 public class PreviewActivity extends Activity {
+	private static final int MIN_ZOOM = 100;
+	private static final int MAX_ZOOM = 180;
+	private static final int ZOOM_STEP = 5;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,6 +40,28 @@ public class PreviewActivity extends Activity {
 
 		if (Common.XPOSED_ACTIVE)
 			findViewById(R.id.xposed_not_active).setVisibility(View.GONE);
+		
+		@SuppressLint("WorldReadableFiles")
+		final SharedPreferences pref = getSharedPreferences(Common.PREF_FILE, Context.MODE_WORLD_READABLE);
+		
+		final TextView sizeText = (TextView) findViewById(id.size_text);
+		SeekBar sizeSeekbar = (SeekBar) findViewById(id.size_seekbar);
+		sizeSeekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				int sizeValue = progress * ZOOM_STEP + MIN_ZOOM;
+				sizeText.setText("" + sizeValue + "%");
+				if (fromUser)
+					pref.edit().putInt(Common.PREF_ZOOM, sizeValue).commit();
+			}
+			
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {}
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {}
+		});
+		sizeSeekbar.setMax((MAX_ZOOM - MIN_ZOOM) / ZOOM_STEP);
+		sizeSeekbar.setProgress((pref.getInt(Common.PREF_ZOOM, 100) - MIN_ZOOM) / ZOOM_STEP);
 
 		Button btnChoose = (Button) findViewById(R.id.btn_choose);
 		btnChoose.setOnClickListener(new View.OnClickListener() {

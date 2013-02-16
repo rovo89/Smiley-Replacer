@@ -34,6 +34,7 @@ public class MovieSpan extends ReplacementSpan {
 	private final int mMovieWidth;
 	private float mScale = 1f;
 	private long mMovieStart = 0;
+	private static float mZoom = 1f;
 	
     private final Bitmap mTmpBitmap;
     private final Canvas mTmpCanvas;
@@ -88,11 +89,17 @@ public class MovieSpan extends ReplacementSpan {
     	
     	paint.getFontMetricsInt(fm);
     	
+    	fm.ascent = fm.top = (int)(fm.ascent * mZoom);
+    	
     	if (mVerticalAlignment == ALIGN_BASELINE)
     		fm.descent = fm.bottom = 0;
     	
     	mScale = (float)(fm.descent - fm.ascent) / mMovieHeight;
         return (int)(mMovieWidth * mScale + 0.5f);
+    }
+    
+    public static void setDefaultZoom(float zoom) {
+    	mZoom = zoom;
     }
     
     public static boolean hasMovieSpans(CharSequence text) {

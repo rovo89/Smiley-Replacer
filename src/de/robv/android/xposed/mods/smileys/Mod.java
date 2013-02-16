@@ -75,6 +75,10 @@ public class Mod implements IXposedHookZygoteInit, IXposedHookInitPackageResourc
 			return;
 		}
 		
+		float zoom = (float) pref.getInt(Common.PREF_ZOOM, 100) / 100f;
+		AutoHeightImageSpan.setDefaultZoom(zoom);
+		MovieSpan.setDefaultZoom(zoom);
+		
 		Smiley[] smileys = new SmileyPackParser(filename).getSmileys();
 		
 		codes = new ArrayList<String>(INITIAL_SMILEY_LIST_SIZE);
