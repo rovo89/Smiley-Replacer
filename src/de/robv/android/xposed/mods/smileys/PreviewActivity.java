@@ -8,7 +8,6 @@ import java.io.InputStream;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -49,9 +48,13 @@ public class PreviewActivity extends Activity {
         btnRestart.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ActivityManager am = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-				am.killBackgroundProcesses(Common.MMS_PACKAGE);
-				
+				sendBroadcast(new Intent(Common.KILL_INTENT));
+
+				try {
+					// sendBroadcast is asynchronous, so wait a bit to make sure the old process is gone
+					Thread.sleep(1000);
+				} catch (InterruptedException ignored) {}
+
 				Intent launchIntent = getPackageManager().getLaunchIntentForPackage(Common.MMS_PACKAGE);
 				if (launchIntent != null) {
 					startActivity(launchIntent);

@@ -4,6 +4,8 @@ public class Common {
 	public static final String TAG = "smiley";
 	public static final String MY_PACKAGE = Common.class.getPackage().getName();
 	public static final String MMS_PACKAGE = "com.android.mms";
+	public static final String KILL_INTENT = MY_PACKAGE + ".KILL_MMS_SMS";
+	public static final String KILL_PERMISSION = KILL_INTENT;
 	
 	public static final String PREF_FILE = "smileys";
 	public static final String PREF_SELECTED_PACK = "selected_pack";

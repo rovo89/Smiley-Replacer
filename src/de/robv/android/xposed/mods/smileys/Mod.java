@@ -1,5 +1,6 @@
 package de.robv.android.xposed.mods.smileys;
 
+import static de.robv.android.xposed.XposedHelpers.callMethod;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 import static de.robv.android.xposed.XposedHelpers.findClass;
 import static de.robv.android.xposed.XposedHelpers.getObjectField;
@@ -13,6 +14,11 @@ import java.util.WeakHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.XResources;
 import android.content.res.XResources.DrawableLoader;
 import android.graphics.drawable.Drawable;
@@ -26,6 +32,7 @@ import android.util.SparseArray;
 import android.widget.TextView;
 import de.robv.android.xposed.IXposedHookInitPackageResources;
 import de.robv.android.xposed.IXposedHookLoadPackage;
+import de.robv.android.xposed.IXposedHookZygoteInit;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XSharedPreferences;
@@ -38,7 +45,7 @@ import de.robv.android.xposed.mods.smileys.views.AutoHeightImageSpan;
 import de.robv.android.xposed.mods.smileys.views.MovieDrawable;
 import de.robv.android.xposed.mods.smileys.views.MovieSpan;
 
-public class Mod implements IXposedHookInitPackageResources, IXposedHookLoadPackage {
+public class Mod implements IXposedHookZygoteInit, IXposedHookInitPackageResources, IXposedHookLoadPackage {
 	private static final int INITIAL_SMILEY_LIST_SIZE = 20;
 	private static final int ANIMATION_REFRESH_RATE = 50;
 	private static final int BACKGROUND_REFRESH_RATE = 1000;
@@ -199,4 +206,32 @@ public class Mod implements IXposedHookInitPackageResources, IXposedHookLoadPack
 			return getDrawable(resMap.get(id));
 		}
 	};
+
+	@Override
+	public void initZygote(StartupParam startupParam) throws Throwable {
+		findAndHookMethod("com.android.server.am.ActivityManagerService", null, "systemReady", Runnable.class, new XC_MethodHook() {
+			@Override
+			protected void beforeHookedMethod(final MethodHookParam param) throws Throwable {
+				final Runnable origCallback = (Runnable) param.args[0];
+				param.args[0] = new Runnable() {
+					@Override
+					public void run() {
+						origCallback.run();
+						Context mContext = (Context) getObjectField(param.thisObject, "mContext");
+						handleSystemServicesReady(mContext);
+					}
+				};
+			}
+		});
+	}
+
+	public void handleSystemServicesReady(Context context) {
+		context.registerReceiver(new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+				callMethod(am, "forceStopPackage", Common.MMS_PACKAGE);
+			}
+		}, new IntentFilter(Common.KILL_INTENT), Common.KILL_PERMISSION, null);
+	}
 }
