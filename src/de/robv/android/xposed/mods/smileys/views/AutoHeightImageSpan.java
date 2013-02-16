@@ -52,23 +52,19 @@ public class AutoHeightImageSpan extends ReplacementSpan {
 	
 	@Override
 	public int getSize(Paint paint, CharSequence text, int start, int end, FontMetricsInt fm) {
-		float scale = 1.0f;
+    	if (fm == null)
+    		fm = new FontMetricsInt();
+    	
+    	paint.getFontMetricsInt(fm);
+    	
     	if (mVerticalAlignment == ALIGN_BASELINE)
-    		scale = -paint.getFontMetrics().ascent / mDrawableHeight;
-    	else
-    		scale = paint.getFontSpacing() / mDrawableHeight;
+    		fm.descent = fm.bottom = 0;
     	
-    	int height = (int)(mDrawableHeight * scale + 0.5f);
+    	int height = fm.descent - fm.ascent;
+    	float scale = (float)height / mDrawableHeight;
     	int width = (int)(mDrawableWidth * scale + 0.5f);
-    	mDrawable.setBounds(0, 0, width, height);
     	
-        if (fm != null) {
-            fm.ascent = -height; 
-            fm.descent = 0; 
-
-            fm.top = fm.ascent;
-            fm.bottom = 0;
-        }
+    	mDrawable.setBounds(0, 0, width, height);
         return width;
 	}
 }
