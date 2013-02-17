@@ -62,6 +62,7 @@ public class AutoHeightImageSpan extends ReplacementSpan {
     		fm.descent = fm.bottom = 0;
     	
     	if (mZoom != 0f) {
+    		fm.ascent = fm.top = (int)(fm.ascent * mZoom);
     		int height = fm.descent - fm.ascent;
     		float scale = (float)height / mDrawableHeight;
     		int width = (int)(mDrawableWidth * scale + 0.5f);
