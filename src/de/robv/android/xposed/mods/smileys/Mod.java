@@ -75,7 +75,8 @@ public class Mod implements IXposedHookZygoteInit, IXposedHookInitPackageResourc
 			return;
 		}
 		
-		float zoom = (float) pref.getInt(Common.PREF_ZOOM, 100) / 100f;
+		boolean zoomEnabled = pref.getBoolean(Common.PREF_ZOOM_ENABLED, true);
+		float zoom = zoomEnabled ? (float) pref.getInt(Common.PREF_ZOOM, 100) / 100f : 0f;
 		AutoHeightImageSpan.setDefaultZoom(zoom);
 		MovieSpan.setDefaultZoom(zoom);
 		

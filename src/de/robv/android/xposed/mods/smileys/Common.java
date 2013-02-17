@@ -9,6 +9,7 @@ public class Common {
 	
 	public static final String PREF_FILE = "smileys";
 	public static final String PREF_SELECTED_PACK = "selected_pack";
+	public static final String PREF_ZOOM_ENABLED = "zoom_enabled";
 	public static final String PREF_ZOOM = "zoom";
 	
 	public static final int REQUEST_CHOOSE_PACK = 1;

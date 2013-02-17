@@ -21,6 +21,9 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -45,7 +48,7 @@ public class PreviewActivity extends Activity {
 		final SharedPreferences pref = getSharedPreferences(Common.PREF_FILE, Context.MODE_WORLD_READABLE);
 		
 		final TextView sizeText = (TextView) findViewById(id.size_text);
-		SeekBar sizeSeekbar = (SeekBar) findViewById(id.size_seekbar);
+		final SeekBar sizeSeekbar = (SeekBar) findViewById(id.size_seekbar);
 		sizeSeekbar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -62,6 +65,17 @@ public class PreviewActivity extends Activity {
 		});
 		sizeSeekbar.setMax((MAX_ZOOM - MIN_ZOOM) / ZOOM_STEP);
 		sizeSeekbar.setProgress((pref.getInt(Common.PREF_ZOOM, 100) - MIN_ZOOM) / ZOOM_STEP);
+		
+		CheckBox sizeCheckbox = (CheckBox) findViewById(R.id.size_checkbox);
+		sizeCheckbox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				sizeSeekbar.setEnabled(isChecked);
+				sizeText.setEnabled(isChecked);
+				pref.edit().putBoolean(Common.PREF_ZOOM_ENABLED, isChecked).commit();
+			}
+		});
+		sizeCheckbox.setChecked(pref.getBoolean(Common.PREF_ZOOM_ENABLED, true));
 
 		Button btnChoose = (Button) findViewById(R.id.btn_choose);
 		btnChoose.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +148,7 @@ public class PreviewActivity extends Activity {
 	
 	@SuppressWarnings("unused")
     private void testMovieSpan() {
+    	MovieSpan.setDefaultZoom(0f);
     	Movie movie = null;
     	try {
     		InputStream is = new BufferedInputStream(new FileInputStream(new File(getFilesDir(), "test.gif")), 16 * 1024);

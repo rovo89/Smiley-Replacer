@@ -58,17 +58,21 @@ public class AutoHeightImageSpan extends ReplacementSpan {
     	
     	paint.getFontMetricsInt(fm);
     	
-    	fm.ascent = fm.top = (int)(fm.ascent * mZoom);
-    	
     	if (mVerticalAlignment == ALIGN_BASELINE)
     		fm.descent = fm.bottom = 0;
     	
-    	int height = fm.descent - fm.ascent;
-    	float scale = (float)height / mDrawableHeight;
-    	int width = (int)(mDrawableWidth * scale + 0.5f);
-    	
-    	mDrawable.setBounds(0, 0, width, height);
-        return width;
+    	if (mZoom != 0f) {
+    		int height = fm.descent - fm.ascent;
+    		float scale = (float)height / mDrawableHeight;
+    		int width = (int)(mDrawableWidth * scale + 0.5f);
+
+    		mDrawable.setBounds(0, 0, width, height);
+    		return width;
+    	} else {
+    		fm.ascent = fm.top = fm.descent - mDrawableHeight;
+    		mDrawable.setBounds(0, 0, mDrawableWidth, mDrawableHeight);
+    		return mDrawableWidth;
+    	}
 	}
 	
     public static void setDefaultZoom(float zoom) {

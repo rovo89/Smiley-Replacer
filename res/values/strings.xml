@@ -23,6 +23,6 @@
     <string name="menu_reset">Reset (use default smileys)</string>
     <string name="menu_import">Import smiley pack</string>
     <string name="menu_reload">Reload smiley packs</string>
-    <string name="size">Size:</string>
+    <string name="auto_resize">Auto-resize</string>
 
 </resources>

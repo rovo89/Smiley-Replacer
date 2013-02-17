@@ -89,13 +89,18 @@ public class MovieSpan extends ReplacementSpan {
     	
     	paint.getFontMetricsInt(fm);
     	
-    	fm.ascent = fm.top = (int)(fm.ascent * mZoom);
-    	
     	if (mVerticalAlignment == ALIGN_BASELINE)
     		fm.descent = fm.bottom = 0;
     	
-    	mScale = (float)(fm.descent - fm.ascent) / mMovieHeight;
-        return (int)(mMovieWidth * mScale + 0.5f);
+    	if (mZoom != 0f) {
+    		fm.ascent = fm.top = (int)(fm.ascent * mZoom);
+    		mScale = (float)(fm.descent - fm.ascent) / mMovieHeight;
+    		return (int)(mMovieWidth * mScale + 0.5f);
+    	} else {
+    		mScale = 1f;
+    		fm.ascent = fm.top = fm.descent - mMovieHeight;
+    		return mMovieWidth;
+    	}
     }
     
     public static void setDefaultZoom(float zoom) {
