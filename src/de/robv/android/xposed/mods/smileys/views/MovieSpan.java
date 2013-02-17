@@ -25,7 +25,7 @@ public class MovieSpan extends ReplacementSpan {
 	public static final int ALIGN_BASELINE = 1;
 
 	private static final Paint PAINT_MODE
-	= new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG);
+		= new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG | Paint.DITHER_FLAG);
 
 	private final int mVerticalAlignment;
 	private final Movie mMovie;

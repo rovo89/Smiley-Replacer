@@ -14,7 +14,10 @@ import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Movie;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 public class SmileyPackParser {
@@ -255,7 +258,9 @@ public class SmileyPackParser {
 		}
 
 		public Drawable getImageAsDrawable() throws IOException {
-			return Drawable.createFromStream(getImageStream(), null);
+			Bitmap bitmap = BitmapFactory.decodeStream(getImageStream());
+			bitmap.setDensity(Bitmap.DENSITY_NONE);
+			return new BitmapDrawable(null, bitmap);
 		}
 
 		public Movie getImageAsMovie() throws IOException {
