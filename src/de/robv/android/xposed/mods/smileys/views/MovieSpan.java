@@ -60,13 +60,16 @@ public class MovieSpan extends ReplacementSpan {
 	@Override
 	public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
 	    canvas.save();
+	    
+	    if (mVerticalAlignment == ALIGN_BASELINE)
+    		bottom = y;
         
-        float transY = y - (int)(mMovieHeight * mScale + 0.5f);
-        if (mVerticalAlignment == ALIGN_BOTTOM)
-        	transY += paint.getFontMetrics().descent;
-        
-        canvas.translate(x, transY);
-        canvas.scale(mScale, mScale);
+        if (mZoom != 0f) {
+        	canvas.translate(x, bottom - mMovieHeight * mScale);
+            canvas.scale(mScale, mScale);
+        } else {
+        	canvas.translate(x, top + (bottom - top - mMovieHeight) / 2);
+        }
         
 	    long now = SystemClock.uptimeMillis();
 	    if (mMovieStart == 0) {

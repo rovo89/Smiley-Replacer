@@ -41,12 +41,16 @@ public class AutoHeightImageSpan extends ReplacementSpan {
 	@Override
     public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
 	    canvas.save();
+	    
+	    if (mVerticalAlignment == ALIGN_BASELINE)
+    		bottom = y;
+	    
+        if (mZoom != 0f) {
+        	canvas.translate(x, bottom - mDrawable.getBounds().bottom);
+        } else {
+        	canvas.translate(x, top + (bottom - top - mDrawableHeight) / 2);
+        }
         
-        float transY = y - mDrawable.getBounds().bottom;
-        if (mVerticalAlignment == ALIGN_BOTTOM)
-        	transY += paint.getFontMetrics().descent;
-        
-        canvas.translate(x, transY);
         mDrawable.draw(canvas);
         canvas.restore();
     }
