@@ -31,30 +31,30 @@ public final class DefaultSmileys {
 		IDs.put("SMIRK", 19);
 		IDs.put("POKERFACE", 20);
 	}
-	
+
 	public static void initOrigNames(Resources res) {
 		if (origNames != null)
 			return;
-		
+
 		origNames = res.getStringArray(res.getIdentifier("default_smiley_names", "array", Common.MMS_PACKAGE));
-    }
-	
+	}
+
 	public static boolean hasOrigNames() {
 		return (origNames != null);
 	}
-	
+
 	public static String maybeReplaceDescription(String desc) {
 		if (!desc.startsWith("DEFAULT:"))
 			return desc;
-		
+
 		desc = desc.substring(8);
 		if (origNames == null || !DefaultSmileys.IDs.containsKey(desc))
 			return desc;
-		
+
 		int id = DefaultSmileys.IDs.get(desc);
 		if (id > origNames.length)
 			return desc;
-		
+
 		return origNames[id];
 	}
 }
